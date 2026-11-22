@@ -4,6 +4,15 @@ import { loadConfig, type BridgeConfig } from './config.js';
 import { SessionManager } from './sessions.js';
 import { createMcpServer } from './tools.js';
 
+// Load .env from the current directory into process.env (real values win).
+// Node throws if the file does not exist; that is fine, env vars may be set
+// another way (system environment, docker, etc.).
+try {
+  process.loadEnvFile();
+} catch {
+  // no .env file present
+}
+
 export function createApp(config: BridgeConfig, manager: SessionManager) {
   const app = express();
   app.use(express.json({ limit: '1mb' }));
